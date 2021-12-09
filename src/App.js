@@ -30,6 +30,6 @@ export default function App(){
 
   return (
   <div className='cards'>
-    <Cards cardsData={cardsData} />
+    <Cards cardsData={cardsData} setcardsData={setcardsData} />
   </div>
   )};
