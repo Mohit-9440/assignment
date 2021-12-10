@@ -2,17 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Cards from './Profile';
 import './App.css';
 
-// const cardsData = [
-//   {
-//     key: 1,
-//     name: 'bharat',
-//     email: 'tamp@gmail.com',
-//     phone: '7789879898',
-//     website: 'websitw.com'
-//   },
-// ]
-
-
 export default function App(){ 
 
   const [cardsData, setcardsData] = useState([])

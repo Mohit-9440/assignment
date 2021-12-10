@@ -27,7 +27,6 @@ body {
 .card_head_image{
   /* background-color: aquamarine; */
   height: 200px;
-  /* width: 460px; */
   display: flex;
   justify-content: center;
   align-items: center;

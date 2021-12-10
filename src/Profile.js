@@ -1,23 +1,165 @@
 import React, { useState ,useEffect } from 'react';
-import { BackTop, Card } from 'antd';
-import { MailOutlined, PhoneOutlined, GlobalOutlined, HeartOutlined, HeartFilled, EditOutlined, DeleteFilled, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
-
-// import BasicModal from './Modal'
+import { Card } from 'antd';
+import { MailOutlined, PhoneOutlined, GlobalOutlined, HeartOutlined, HeartFilled, EditOutlined, DeleteFilled } from '@ant-design/icons';
 
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 
-export default function Cards({cardsData, setcardsData}){
+export default function Cards({cardsData, setcardsData}) {
 
-  useEffect(() => {
-    // CardOptions()
-    console.log(cardsData)
-    // AllCards()
+  const [temp, setTemp] = useState(0)
+  const [liked, setLiked] = useState(false)
+  const [formData, setFormData] = useState()
+
+  const [ids, setIds] = useState()
+  console.log(ids)
+  
+  const { Meta } = Card;
+
+  
+  const Title = ({title}) => {
+    return (
+      <h3>{title}</h3>
+    )
+  }
+  const Hero = ({name}) => {
+    return (
+      <div className="card_head_image">
+        <img alt='' src={`https://avatars.dicebear.com/v2/avataaars/${name}.svg?options[mood][]=hap`} />
+      </div>
+    )
+  }
+  const Description = ({email, phone, website}) => {
+    return (
+        <div className='card_body_detail'>
+          <div>
+          <MailOutlined />
+            <span>{email}</span>
+          </div>
+
+          <div>
+          <PhoneOutlined />
+            <span>{phone}</span>
+          </div>
+
+          <div>
+          <GlobalOutlined />
+            <span>{website}</span>
+          </div>
+                  
+        </div>
+    )
+  }
+  const BasicModal = (cardData) => {
+
+    let refName = cardData.name;
+    let refEmail = cardData.email;
+    let refPhone = cardData.phone;
+    let refWebsite = cardData.website;
     
-  }, [cardsData])
+    
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className='modal'>
+            <div className="main_modal">
+              <div className='modal_header'>
+                <div className='modal_title'>Basic Modal</div>
+                <div onClick={() => onClose()} style={{cursor: 'pointer'}}>X</div>
+              </div>
 
-  const AllCards = () => {
+              <div className="modal_form">
+                <div>
+                  <label htmlFor="name">Name :</label>
+                  <input type="text" id="name" placeholder={cardData.name} onChange={(e) => refName = e.target.value} />
+                </div>
+                
+                <div>
+                  <label htmlFor="email">Email :</label>
+                  <input required type="text" id="email" placeholder={cardData.email} onChange={(e) => refEmail = e.target.value} />
+                </div>
+                <div>
+                  <label htmlFor="phone">Phone :</label>
+                  <input type="text" id="phone" placeholder={cardData.phone} onChange={(e) => refPhone = e.target.value} />
+                </div>
+                <div>
+                  <label htmlFor="website">Website :</label>
+                  <input type="text" id="website" placeholder={cardData.website} onChange={(e) => refWebsite = e.target.value} />
+                </div>
+
+              </div>
+
+              <div className="modal_footer">
+                <div>
+                  <button  onClick={() => onClose()}>Cancel</button>
+                  <button onClick={() => {
+                        const data = {
+                          id :	cardData.id,
+                          name :	refName,
+                          username :	cardData.username,
+                          email :	refEmail,
+                          address: cardData.address,
+                          phone :	refPhone,
+                          website :	refWebsite,
+                          company	: cardData.company,     
+                        }
+                        const findIndex = cardsData.findIndex(e => e.id === cardData.id);
+                        cardsData.splice((findIndex), 1)
+                        cardsData.splice((findIndex), 0, data)
+                        setTemp(temp+1)
+                        setFormData(data)
+                        onClose()
+
+                  }}>OK</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+    })}
+
+  const CardOptions = ({ cardData, id }) => {
+
+    const handleDelete = () => {
+      const findIndex = cardsData.findIndex(e => e.id === id);
+      cardsData.splice((findIndex), 1)
+      setcardsData(cardsData)
+      setTemp(temp+1)
+
+    }
+
+    
+    return (
+      <div className='buttons'>
+        {id === 1 ? (
+          <button onClick={() => {setLiked(!liked); setIds(id)}} className='favourite'>
+          {liked ? (
+            <HeartFilled style={{ color: 'red' }} />
+            ) : (
+            <HeartOutlined style={{ color: 'red' }} />
+          )}
+        </button>
+        ) : (
+          <button onClick={() => {setIds(id)}} className='favourite'>
+            <HeartOutlined style={{ color: 'red' }} />
+        </button>
+        )}
+        <button onClick={() => BasicModal(cardData)} className='edit'>
+          <EditOutlined />
+        </button>
+
+        <button onClick={handleDelete} className='delete'>
+          <DeleteFilled />
+        </button>
+
+      </div>
+    )
+  }
+
+
+  function AllCards () {
 
     return (
       cardsData.map(cardData => ( 
@@ -39,7 +181,7 @@ export default function Cards({cardsData, setcardsData}){
           </div>
   
           <Meta
-            description={<CardOptions cardsData={cardsData} setcardsData={setcardsData} id={cardData.id} />}
+            description={<CardOptions cardData={cardData} id={cardData.id} />}
           />
           </div>
         </Card>
@@ -47,197 +189,13 @@ export default function Cards({cardsData, setcardsData}){
     )
   }
 
-  const { Meta } = Card;
+  
+  useEffect(() => {
+    AllCards()
+  })
 
     return( 
 <>
       {AllCards()}
-     {/* <button onClick={BasicModal}>modal</button> */}
 </>
     )}
-
-  const Title = ({title}) => {
-    return (
-      <h3>{title}</h3>
-    )
-  }
-  const Hero = ({name}) => {
-    return (
-      <div className="card_head_image">
-        <img alt='' src={`https://avatars.dicebear.com/v2/avataaars/${name}.svg?options[mood][]=hap`} />
-      </div>
-    )
-  }
-  const Description = ({email, phone, website}) => {
-    return (
-        <div className='card_body_detail'>
-           <div>
-           <MailOutlined />
-             <span>{email}</span>
-           </div>
-
-           <div>
-           <PhoneOutlined />
-             <span>{phone}</span>
-           </div>
-
-           <div>
-           <GlobalOutlined />
-             <span>{website}</span>
-           </div>
-                  
-        </div>
-    )
-  }
-  
-  const CardOptions = ({ cardsData, id, setcardsData }) => {
-
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [phone, setPhone] = useState('')
-    const [website, setWebsite] = useState('')
-    const [temp, setTemp] = useState(0)
-
-    
-
-    const handleDelete = () => {
-      // fetch(`https://jsonplaceholder.typicode.com/users/2`, {
-      // method: 'DELETE',
-      // });
-     cardsData.splice((id-1), 1)
-     setTemp(temp+1)
-    //  console.log(cardsData)
-     setcardsData(cardsData)
-      // console.log(cardsData[id-1])
-      
-
-// console.log(id)
-
-    }
-    // console.log(name)
-
-    const formData = {
-    name: name,        
-    email: email,        
-    phone: phone,        
-    website: website,          
-    }
-
-          const handleOk = () => {
-
-            console.log(name)
-            console.log(email)
-            console.log(phone)
-            console.log(website)
-          }
-    const BasicModal = (message) => {
-      confirmAlert({
-        customUI: ({ onClose }) => {
-          return (
-            <div className='modal'>
-              <div class="main_modal">
-                <div className='modal_header'>
-                  <div className='modal_title'>Basic Modal</div>
-                  <div onClick={() => onClose()} style={{cursor: 'pointer'}}>X</div>
-                </div>
-  
-                <div class="modal_form">
-                  <div>
-                    <label for="name">Name :</label>
-                    <input type="text" id="name" placeholder={name} onChange={(e) => setName(e.target.value)} />
-                  </div>
-                  
-                  <div>
-                    <label for="email">Email :</label>
-                    <input type="text" id="email" placeholder={email} onChange={(e) => setEmail(e.target.value)} />
-                  </div>
-                  <div>
-                    <label for="phone">Phone :</label>
-                    <input type="text" id="phone" placeholder={phone} onChange={(e) => setPhone(e.target.value)} />
-                  </div>
-                  <div>
-                    <label for="website">Website :</label>
-                    <input type="text" id="website" placeholder={website} onChange={(e) => setWebsite(e.target.value)} />
-                  </div>
-  
-                </div>
-  
-                <div class="modal_footer">
-                  <div>
-                    <button  onClick={() => onClose()}>Cancel</button>
-                    <button onClick={handleOk}>OK</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        }
-      })}
-    return (
-      <div className='buttons'>
-
-        <button className='favourite'>
-          <HeartOutlined style={{outlineColor: 'red'}} />
-        </button>
-
-        <button onClick={BasicModal} className='edit'>
-          <EditOutlined />
-        </button>
-
-        <button onClick={handleDelete} className='delete'>
-          <DeleteFilled />
-        </button>
-
-      </div>
-    )
-  }
-
-
- 
-  
-
-
-
-  // cardsData.map(cardData => (
-      //   <div key={cardData.id} className="card">
-      //       <div className="card_head_image">
-      //           <img alt='' src={`https://avatars.dicebear.com/v2/avataaars/${cardData.name}.svg?options[mood][]=hap`} />
-      //       </div>
-      //       <div className="card_body">
-      //       <div className='card_body_main'>
-      //           <h3>{cardData.name}</h3>
-      //           {/* <h3>Mohit Sharma</h3> */}
-                
-      //           <div className='card_body_detail'>
-      //             <div>
-      //             <MailOutlined />
-      //               <span>{cardData.email}</span>
-      //             </div>
-
-      //             <div>
-      //             <PhoneOutlined />
-      //               <span>{cardData.phone}</span>
-      //             </div>
-
-      //             <div>
-      //             <GlobalOutlined />
-      //               <span>{cardData.website}</span>
-      //             </div>
-                  
-      //           </div>
-                
-      //       </div>
-
-      //       <div className='buttons'>
-      //       <button className='favourite'>
-      //         <HeartOutlined style={{outlineColor: 'red'}} />
-      //       </button>
-      //       <button className='edit'>
-      //         <EditOutlined />
-      //       </button>
-      //       <button className='delete'><DeleteFilled /></button>
-      //       </div>
-                
-      //       </div>
-      //     </div>
-      // ))
