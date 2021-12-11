@@ -12,14 +12,15 @@ export default function App(){
                     .catch((err)=> {
                       console.log(err)
                     })}
+                    
 
   useEffect(() => {
     getData()
+    console.log(cardsData)
   }, [])
 
   return (
   <div className='cards'>
-    <Cards cardsData={cardsData} setcardsData={setcardsData} />
     <div className='cards_wrapper'>
       <Cards cardsData={cardsData} setcardsData={setcardsData} />
     </div>
