@@ -20,5 +20,8 @@ export default function App(){
   return (
   <div className='cards'>
     <Cards cardsData={cardsData} setcardsData={setcardsData} />
+    <div className='cards_wrapper'>
+      <Cards cardsData={cardsData} setcardsData={setcardsData} />
+    </div>
   </div>
   )};

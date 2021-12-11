@@ -77,7 +77,7 @@ export default function Cards({cardsData, setcardsData}) {
                 
                 <div>
                   <label htmlFor="email">Email :</label>
-                  <input required type="text" id="email" placeholder={cardData.email} onChange={(e) => refEmail = e.target.value} />
+                  <input type="text" id="email" placeholder={cardData.email} onChange={(e) => refEmail = e.target.value} />
                 </div>
                 <div>
                   <label htmlFor="phone">Phone :</label>
